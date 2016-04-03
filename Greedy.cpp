@@ -5,6 +5,7 @@
  Description:
 	-v0.1	Greedy algorithm for reducing test cases
  *****************************************************************************/
+
 #include <vector>
 #include <numeric>
 using namespace std;
@@ -12,20 +13,26 @@ using namespace std;
 class Greedy{
 public:
 
+// Greedy algorithm to reduce redundant test cases,the reduced cases are
+// stored in vector 'selected' .
 void reduce(vector<vector<bool> > tests,vector<bool> &selected){
-
+	// Init the selected test cases
 	selected.resize(tests.size(),false);
 
+	// Calculate the coverage of the original test cases
 	vector<bool> target(tests[0].size(),false);
 	for(auto &t:tests)
 		addTo(t,target);
 
+	// Init the selected with the maximum coverage first
 	size_t i=findMaxRow(tests,selected);
 	vector<bool> tested(tests[0].size());
 	tested=tests[i];
 	selected[i]=true;
 	clearTo(tested,tests);
 
+	// Iteratively select the test cases with the maximum additional coverage
+	// until the selected test cases cover all original test cases
 	while(tested!=target){
 		size_t j=findMaxRow(tests,selected);
 		addTo(tests[j],tested);
