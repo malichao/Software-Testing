@@ -1,9 +1,10 @@
-/*
- * Greedy.cpp
- *
- *  Created on: Apr 3, 2016
- *      Author: Lichao
- */
+/******************************************************************************
+ Author		: Lichao Ma
+ Date  		: Apr 3,2016
+ Version	: v0.1
+ Description:
+	-v0.1	Greedy algorithm for reducing test cases
+ *****************************************************************************/
 #include <vector>
 #include <numeric>
 using namespace std;
@@ -36,7 +37,8 @@ void reduce(vector<vector<bool> > tests,vector<bool> &selected){
 
 private:
 
-size_t findMaxRow(const vector<vector<bool> > &tests,const vector<bool> &selected){
+size_t findMaxRow(	const vector<vector<bool> > &tests,
+					const vector<bool> &selected){
 	size_t row=0;
 	size_t maxNum=0;
 	for(size_t i=0;i<tests.size();i++){
