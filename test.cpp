@@ -5,7 +5,7 @@
  *      Author: Lichao
  */
 
-/*
+
 #include <iostream>
 #include "Greedy.cpp"
 using namespace std;
@@ -25,4 +25,4 @@ int main(){
 		cout<<r<<",";
 }
 
-*/
+

@@ -10,46 +10,8 @@ using namespace std;
 
 class Greedy{
 public:
-	void reduce(vector<vector<bool> > tests,vector<bool> &result);
-private:
-	size_t findMaxRow(const vector<vector<bool> > &tests,const vector<bool> &selected);
-	void addTo(const vector<bool> &src,vector<bool> &trg);
-	void clearTo(const vector<bool> &src,vector<bool> &trg);
-	void clearTo(const vector<bool> &src,vector<vector<bool> > &trg);
 
-};
-
-size_t Greedy::findMaxRow(const vector<vector<bool> > &tests,const vector<bool> &selected){
-	size_t row=0;
-	size_t maxNum=0;
-	for(size_t i=0;i<tests.size();i++){
-		if(!selected[i]){
-			size_t num=accumulate(tests[i].begin(),tests[i].end(),true);
-			if(num>maxNum){
-				row=i;
-				maxNum=num;
-			}
-		}
-	}
-	return row;
-}
-
-void Greedy::addTo(const vector<bool> &src,vector<bool> &trg){
-	for(size_t i=0;i<src.size();i++)
-		trg[i]=trg[i]|src[i];
-}
-
-void Greedy::clearTo(const vector<bool> &src,vector<bool> &trg){
-	for(size_t i=0;i<src.size();i++)
-		trg[i]=trg[i]&(!src[i]);
-}
-
-void Greedy::clearTo(const vector<bool> &src,vector<vector<bool> > &trg){
-	for(auto &t:trg)
-		clearTo(src,t);
-}
-
-void Greedy::reduce(vector<vector<bool> > tests,vector<bool> &selected){
+void reduce(vector<vector<bool> > tests,vector<bool> &selected){
 
 	selected.resize(tests.size(),false);
 
@@ -70,6 +32,42 @@ void Greedy::reduce(vector<vector<bool> > tests,vector<bool> &selected){
 		clearTo(tested,tests);
 	}
 }
+
+
+private:
+
+size_t findMaxRow(const vector<vector<bool> > &tests,const vector<bool> &selected){
+	size_t row=0;
+	size_t maxNum=0;
+	for(size_t i=0;i<tests.size();i++){
+		if(!selected[i]){
+			size_t num=accumulate(tests[i].begin(),tests[i].end(),true);
+			if(num>maxNum){
+				row=i;
+				maxNum=num;
+			}
+		}
+	}
+	return row;
+}
+
+void addTo(const vector<bool> &src,vector<bool> &trg){
+	for(size_t i=0;i<src.size();i++)
+		trg[i]=trg[i]|src[i];
+}
+
+void clearTo(const vector<bool> &src,vector<bool> &trg){
+	for(size_t i=0;i<src.size();i++)
+		trg[i]=trg[i]&(!src[i]);
+}
+
+void clearTo(const vector<bool> &src,vector<vector<bool> > &trg){
+	for(auto &t:trg)
+		clearTo(src,t);
+}
+
+};
+
 
 
 /*
