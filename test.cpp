@@ -5,7 +5,7 @@
  Description:
 	-v0.1	Test cases for Greedy algorithm
  *****************************************************************************/
-
+/*
 #include <iostream>
 #include "Greedy.cpp"
 using namespace std;
@@ -52,4 +52,4 @@ int main(){
 	test2();
 }
 
-
+*/
