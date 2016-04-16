@@ -13,6 +13,10 @@ using namespace std;
 class Greedy{
 public:
 
+size_t getCount(vector<vector<bool> > tests){
+	return tests.size();
+}
+
 double getCoverage(vector<vector<bool> > tests,vector<bool> &coverage){
 	if(tests.empty()||tests[0].empty())
 		return 0;
@@ -63,7 +67,7 @@ size_t findMaxRow(	const vector<vector<bool> > &tests,
 	size_t maxNum=0;
 	for(size_t i=0;i<tests.size();i++){
 		if(!selected[i]){
-			size_t num=accumulate(tests[i].begin(),tests[i].end(),true);
+			size_t num=accumulate(tests[i].begin(),tests[i].end(),0);
 			if(num>maxNum){
 				row=i;
 				maxNum=num;

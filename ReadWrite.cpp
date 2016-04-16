@@ -13,7 +13,7 @@
 #include <cstring>
 #include "Greedy.cpp"
 
-void process(char *inputName,char *outputName,char *ILPOutputName){
+void process(string inputName,string outputName,string ILPOutputName){
 	using namespace std;
 	//Reading the input
 	try{
@@ -45,24 +45,24 @@ void process(char *inputName,char *outputName,char *ILPOutputName){
 		vector<bool> reducedCases;
 		vector<bool> coverage;
 		Greedy g;
+		cout<<"\nTest cases number = "<<g.getCount(testCases)<<endl;
+		cout<<"Coverage = "<<g.getCoverage(testCases,coverage)*100<<"%\n";
 		g.reduce(testCases,reducedCases);
 
-
 		//Print the result
-		cout<<"Test reduction completed.\n";
-		cout<<"===Coverage statistics===\n";
-		cout<<"Coverage = "<<g.getCoverage(testCases,coverage)*100<<"%\n";
+		cout<<"Test Coverage Vector:\n";
 		for(auto c:coverage)	cout<<c<<" ";
-		cout<<"\n\n===Reduction result===\n";
+
+		cout<<"\n\nReduction result:\n";
 		for(auto r:reducedCases)	cout<<r<<" ";
 		cout<<endl;
 
 		//Save the result into the file
-		if(strlen(outputName)){
+		if(outputName.length()){
 			cout<<"Opening \""<<outputName<<"\"\n";
 			ofstream outputFile(outputName,ofstream::out);
-			outputFile.exceptions(ifstream::failbit);
-
+			outputFile.exceptions(ifstream::badbit);
+			outputFile<<"#Test Reduction Using Greedy Algorithm\n";
 			for(auto r:reducedCases)
 				outputFile<<r<<endl;
 			cout<<"\nResult was saved to \""<<outputName<<"\"\n";
@@ -70,10 +70,10 @@ void process(char *inputName,char *outputName,char *ILPOutputName){
 
 		//Convert the test cases to ILP model and then use lp_solve program to
 		//solve the ILP.
-		if(strlen(ILPOutputName)){
+		if(ILPOutputName.length()){
 			cout<<"Opening \""<<ILPOutputName<<"\"\n";
 			ofstream out(ILPOutputName,ofstream::out);
-			out.exceptions(ifstream::failbit);
+			out.exceptions(ifstream::badbit);
 
 			//State the objective,e.g., min t1 + t2 + t3 + t4;
 			out<<"min: t1";
@@ -103,8 +103,10 @@ void process(char *inputName,char *outputName,char *ILPOutputName){
 }
 
 int main(int argc,char** argv){
-
-	if (4 == argc)
+	if(2==argc){
+		process(argv[1], string(argv[1])+"-greedy", string(argv[1])+"-ilp");
+	}
+	else if (4 == argc)
 		process(argv[1], argv[2], argv[3]);
 	else
 		throw std::invalid_argument("Argument number mismatched");
