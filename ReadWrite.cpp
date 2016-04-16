@@ -67,12 +67,13 @@ void process(char *inputName,char *outputName,char *ILPOutputName){
 			ofstream out(ILPOutputName,ofstream::out);
 			out.exceptions(ifstream::failbit);
 
-			//State the target,e.g., min t1+t2+t3+t4;
+			//State the objective,e.g., min t1 + t2 + t3 + t4;
 			out<<"min: t1";
 			for(size_t i=1;i<testCases.size();i++)
 				out<<" + t"<<i+1;
 			out<<";\n";
 
+			//State the constraints,e.g.,1*x1 + 0*x2 + 0*x3 + 0*x4 >=1;
 			for(size_t j=0;j<testCases[0].size();j++){
 				if(testCases[0][j])
 					out<<"1*t1";
