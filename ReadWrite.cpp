@@ -62,13 +62,13 @@ void process(string inputName,string outputName,string ILPOutputName){
 
 		//Save the result into the file
 		if(outputName.length()){
-			cout<<"Opening \""<<outputName<<"\"\n";
+			cout<<"\nOpening \""<<outputName<<"\"\n";
 			ofstream outputFile(outputName,ofstream::out);
 			outputFile.exceptions(ifstream::badbit);
 			outputFile<<"#Test Reduction Using Greedy Algorithm\n";
 			for(auto r:reducedCases)
 				outputFile<<r<<endl;
-			cout<<"\nResult was saved to \""<<outputName<<"\"\n";
+			cout<<"Result was saved to \""<<outputName<<"\"\n";
 		}
 
 		//Convert the test cases to ILP model and then use lp_solve program to
