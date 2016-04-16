@@ -12,10 +12,8 @@
 #include <stdexcept>
 #include <cstring>
 #include "Greedy.cpp"
-using namespace std;
 
-
-void process(char *inputName,char *outputName){
+void process(char *inputName,char *outputName,char *ILPOutputName){
 	using namespace std;
 	//Reading the input
 	try{
@@ -31,7 +29,9 @@ void process(char *inputName,char *outputName){
 			istringstream in(temp);
 			bool value;
 			vector<bool> row;
-			while(in>>value) row.push_back(value);
+			while(in>>value)
+				row.push_back(value);
+			testCases.push_back(row);
 		}
 
 		vector<bool> reducedCases;
@@ -39,7 +39,7 @@ void process(char *inputName,char *outputName){
 		Greedy g;
 		g.reduce(testCases,reducedCases);
 
-		cout<<"test1\n";
+		cout<<"Test reduction completed.\n";
 		for(auto r:reducedCases)
 			cout<<r<<",";
 		cout<<endl;
@@ -47,23 +47,19 @@ void process(char *inputName,char *outputName){
 		if(strlen(outputName)){
 			ofstream outputFile(outputName,ofstream::out);
 			outputFile.exceptions(ifstream::failbit);
+
+			for(auto r:reducedCases)
+				outputFile<<r<<endl;
+			cout<<"Result was saved to \""<<outputName<<"\"\n";
 		}
 	}catch(exception& e){
-		std::cerr<<"Error Occured when reading/writing files!\n\t"<<e.what()<<endl;
+		std::cerr<<"Error Occurred when reading/writing files!\n\t"<<e.what()<<endl;
 	}
 }
 
 int main(int argc,char** argv){
-	using namespace std;
-	try{
-		if(3==argc){
-				process(argv[1],argv[2]);
-			}
-		else
-			throw std::invalid_argument("Argument number mismatched");
-	  }
-	  catch (exception& e)
-	  {
-	    cout << e.what() << '\n';
-	  }
+	if (4 == argc)
+		process(argv[1], argv[2], argv[3]);
+	else
+		throw std::invalid_argument("Argument number mismatched");
 }
