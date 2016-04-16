@@ -47,6 +47,7 @@ void process(string inputName,string outputName,string ILPOutputName){
 		Greedy g;
 		size_t caseNum=g.getCount(testCases);
 		cout<<"\nTest cases number = "<<caseNum<<endl;
+		cout<<"Code Statement number = "<<testCases[0].size()<<endl;
 		cout<<"Coverage = "<<g.getCoverage(testCases,coverage)*100<<"%\n";
 		g.reduce(testCases,reducedCases);
 
