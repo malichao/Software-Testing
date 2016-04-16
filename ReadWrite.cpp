@@ -93,7 +93,10 @@ void process(string inputName,string outputName,string ILPOutputName){
 					else
 						out<<" + 0*t"<<i+1;
 				}
-				out<<" >=1;\n";
+				if(coverage[j])
+					out<<" >=1;\n";
+				else
+					out<<" >=0;\n";
 			}
 			cout<<"ILP model was saved to \""<<ILPOutputName<<"\"\n";
 		}
