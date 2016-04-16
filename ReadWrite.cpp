@@ -17,14 +17,19 @@ void process(char *inputName,char *outputName,char *ILPOutputName){
 	using namespace std;
 	//Reading the input
 	try{
+		cout<<"Opening \""<<inputName<<"\"\n";
 		ifstream inputFile(inputName,std::ifstream::in);
 
 		//Must set these bits to enable exception
-		inputFile.exceptions(ifstream::failbit);
+		//set the badbit for IO R/W error,not failbit!
+		//badbit:	Read/writing error on i/o operation
+		//failbit:	Logical error on i/o operation
+		inputFile.exceptions(ifstream::badbit);
 
+		cout<<"Reducing test cases..\n";
 		//Read the test cases from file and convert them to bool vector
 		vector<vector<bool> > testCases;
-		while(inputFile.good()){
+		while(!inputFile.eof()){
 			string temp;
 			getline(inputFile,temp);
 			istringstream in(temp);
@@ -32,7 +37,8 @@ void process(char *inputName,char *outputName,char *ILPOutputName){
 			vector<bool> row;
 			while(in>>value)
 				row.push_back(value);
-			testCases.push_back(row);
+			if(!row.empty())
+				testCases.push_back(row);
 		}
 
 		//Do the test reduction using Greedy algorithm
@@ -53,6 +59,7 @@ void process(char *inputName,char *outputName,char *ILPOutputName){
 
 		//Save the result into the file
 		if(strlen(outputName)){
+			cout<<"Opening \""<<outputName<<"\"\n";
 			ofstream outputFile(outputName,ofstream::out);
 			outputFile.exceptions(ifstream::failbit);
 
@@ -64,6 +71,7 @@ void process(char *inputName,char *outputName,char *ILPOutputName){
 		//Convert the test cases to ILP model and then use lp_solve program to
 		//solve the ILP.
 		if(strlen(ILPOutputName)){
+			cout<<"Opening \""<<ILPOutputName<<"\"\n";
 			ofstream out(ILPOutputName,ofstream::out);
 			out.exceptions(ifstream::failbit);
 
@@ -90,13 +98,21 @@ void process(char *inputName,char *outputName,char *ILPOutputName){
 			cout<<"ILP model was saved to \""<<ILPOutputName<<"\"\n";
 		}
 	}catch(exception& e){
-		std::cerr<<"Error Occurred when reading/writing files!\n\t"<<e.what()<<endl;
+		std::cerr<<e.what()<<endl;
 	}
 }
 
 int main(int argc,char** argv){
+
 	if (4 == argc)
 		process(argv[1], argv[2], argv[3]);
 	else
 		throw std::invalid_argument("Argument number mismatched");
+
+/*
+	char input[]="Debug/test_case1.txt";
+	char output[]="Debug/result.txt";
+	char ilp[]="Debug/ilp.txt";
+	process(input,output,ilp);
+*/
 }
