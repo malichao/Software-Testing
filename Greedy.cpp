@@ -17,6 +17,10 @@ size_t getCount(vector<vector<bool> > tests){
 	return tests.size();
 }
 
+size_t getCount(vector<bool> test){
+	return std::accumulate(test.begin(),test.end(),0);
+}
+
 double getCoverage(vector<vector<bool> > tests,vector<bool> &coverage){
 	if(tests.empty()||tests[0].empty())
 		return 0;

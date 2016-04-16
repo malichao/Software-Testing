@@ -45,7 +45,8 @@ void process(string inputName,string outputName,string ILPOutputName){
 		vector<bool> reducedCases;
 		vector<bool> coverage;
 		Greedy g;
-		cout<<"\nTest cases number = "<<g.getCount(testCases)<<endl;
+		size_t caseNum=g.getCount(testCases);
+		cout<<"\nTest cases number = "<<caseNum<<endl;
 		cout<<"Coverage = "<<g.getCoverage(testCases,coverage)*100<<"%\n";
 		g.reduce(testCases,reducedCases);
 
@@ -54,6 +55,7 @@ void process(string inputName,string outputName,string ILPOutputName){
 		for(auto c:coverage)	cout<<c<<" ";
 
 		cout<<"\n\nReduction result:\n";
+		cout<<"Cases reduced = "<<caseNum-g.getCount(reducedCases)<<endl;
 		for(auto r:reducedCases)	cout<<r<<" ";
 		cout<<endl;
 
