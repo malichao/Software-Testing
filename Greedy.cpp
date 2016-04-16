@@ -21,7 +21,7 @@ double getCoverage(vector<vector<bool> > tests,vector<bool> &coverage){
 	coverage.resize(tests[0].size(),false);
 	for(auto &t:tests)
 		addTo(t,coverage);
-	size_t num=std::accumulate(coverage.begin(),coverage.end(),0);
+	double num=std::accumulate(coverage.begin(),coverage.end(),0);
 	return num/coverage.size();
 }
 
