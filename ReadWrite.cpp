@@ -22,6 +22,7 @@ void process(char *inputName,char *outputName,char *ILPOutputName){
 		//Must set these bits to enable exception
 		inputFile.exceptions(ifstream::failbit);
 
+		//Read the test cases from file and convert them to bool vector
 		vector<vector<bool> > testCases;
 		while(inputFile.good()){
 			string temp;
@@ -34,23 +35,58 @@ void process(char *inputName,char *outputName,char *ILPOutputName){
 			testCases.push_back(row);
 		}
 
+		//Do the test reduction using Greedy algorithm
 		vector<bool> reducedCases;
-
+		vector<bool> coverage;
 		Greedy g;
 		g.reduce(testCases,reducedCases);
 
+
+		//Print the result
 		cout<<"Test reduction completed.\n";
-		for(auto r:reducedCases)
-			cout<<r<<",";
+		cout<<"===Coverage statistics===\n";
+		cout<<"Coverage = "<<g.getCoverage(testCases,coverage)*100<<"%\n";
+		for(auto c:coverage)	cout<<c<<" ";
+		cout<<"\n\n===Reduction result===\n";
+		for(auto r:reducedCases)	cout<<r<<" ";
 		cout<<endl;
 
+		//Save the result into the file
 		if(strlen(outputName)){
 			ofstream outputFile(outputName,ofstream::out);
 			outputFile.exceptions(ifstream::failbit);
 
 			for(auto r:reducedCases)
 				outputFile<<r<<endl;
-			cout<<"Result was saved to \""<<outputName<<"\"\n";
+			cout<<"\nResult was saved to \""<<outputName<<"\"\n";
+		}
+
+		//Convert the test cases to ILP model and then use lp_solve program to
+		//solve the ILP.
+		if(strlen(ILPOutputName)){
+			ofstream out(ILPOutputName,ofstream::out);
+			out.exceptions(ifstream::failbit);
+
+			//State the target,e.g., min t1+t2+t3+t4;
+			out<<"min: t1";
+			for(size_t i=1;i<testCases.size();i++)
+				out<<" + t"<<i+1;
+			out<<";\n";
+
+			for(size_t j=0;j<testCases[0].size();j++){
+				if(testCases[0][j])
+					out<<"1*t1";
+				else
+					out<<"0*t1";
+				for(size_t i=1;i<testCases.size();i++){
+					if(testCases[i][j])
+						out<<" + 1*t"<<i+1;
+					else
+						out<<" + 0*t"<<i+1;
+				}
+				out<<" >=1;\n";
+			}
+			cout<<"ILP model was saved to \""<<ILPOutputName<<"\"\n";
 		}
 	}catch(exception& e){
 		std::cerr<<"Error Occurred when reading/writing files!\n\t"<<e.what()<<endl;

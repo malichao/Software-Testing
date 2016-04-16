@@ -13,6 +13,19 @@ using namespace std;
 class Greedy{
 public:
 
+double getCoverage(vector<vector<bool> > tests,vector<bool> &coverage){
+	if(tests.empty()||tests[0].empty())
+		return 0;
+
+	// Init the selected test cases
+	coverage.resize(tests[0].size(),false);
+	for(auto &t:tests)
+		addTo(t,coverage);
+	size_t num=std::accumulate(coverage.begin(),coverage.end(),0);
+	return num/coverage.size();
+}
+
+
 // Greedy algorithm to reduce redundant test cases,the reduced cases are
 // stored in vector 'selected' .
 void reduce(vector<vector<bool> > tests,vector<bool> &selected){
