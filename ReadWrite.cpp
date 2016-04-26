@@ -46,13 +46,14 @@ void process(string inputName,string outputName,string ILPOutputName){
 		}
 		vector<vector<bool> > testCasesCopy(*testCases);
 		//Do the test reduction using Greedy algorithm
-		vector<bool> *reducedCases=new vector<bool>(testCases[0].size());
-		vector<bool> *coverage=new vector<bool>(testCases[0].size());
+		vector<bool> *reducedCases=new vector<bool>((*testCases)[0].size());
+		vector<bool> *coverage=new vector<bool>((*testCases)[0].size());
 		Greedy g;
 		size_t caseNum=g.getCount(testCasesCopy);
 		cout<<"\nTest cases number = "<<caseNum<<endl;
 		cout<<"Code Statement number = "<<(*testCases)[0].size()<<endl;
 		size_t statementCoverage=g.getCoverage((*testCases),*coverage)*100;
+		cout<<"Covered Statement number = "<<g.getCount(*coverage)<<endl;
 		cout<<"Coverage = "<<statementCoverage<<"%\n";
 		g.reduce(testCasesCopy,*reducedCases);
 

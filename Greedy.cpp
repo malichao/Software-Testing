@@ -30,7 +30,7 @@ double getCoverage(vector<vector<bool> > &tests,vector<bool> &coverage){
 		return 0;
 
 	// Init the selected test cases
-	coverage.resize(tests[0].size(),false);
+	//coverage.resize(tests[0].size(),false);
 	double size=coverage.size();
 	for(auto &t:tests)
 		addTo(t,coverage);
@@ -51,13 +51,11 @@ void reduce(vector<vector<bool> > &tests,vector<bool> &selected){
 	size_t size=tests[0].size();
 	cout<<"size="<<size<<endl;
 	// Calculate the coverage of the original test cases
-	std::unique_ptr<vector<bool> > target(new vector<bool>(size));
+	//std::unique_ptr<vector<bool> > target(new vector<bool>(size));
+	vector<bool>  *target=new vector<bool>(size);
 
 	for(auto &t:tests)
 		addTo(t,*target);
-
-	//size_t debugTotal=getCount(*target);		//for debugging
-
 
 	// Init the selected with the maximum coverage first
 	size_t i=findMaxRow(tests,selected);
@@ -66,8 +64,9 @@ void reduce(vector<vector<bool> > &tests,vector<bool> &selected){
 	selected[i]=true;
 	clearTo(tested,tests);
 
-	//size_t debugLastState=getCount(tested);		//for debugging
-
+	size_t debugLastState=getCount(tested);		//for debugging
+	cout<<"total size = "<<getCount(*target)<<endl;
+	cout<<"tested size = "<<getCount(tested)<<endl;
 	// Iteratively select the test cases with the maximum additional coverage
 	// until the selected test cases cover all original test cases
 	while(tested!=(*target)){
@@ -76,11 +75,7 @@ void reduce(vector<vector<bool> > &tests,vector<bool> &selected){
 		selected[j]=true;
 		clearTo(tested,tests);
 
-		//Print out the progress,for debugging
-		//if(getCount(tested)>debugLastState){
-		//	cout<<"= ";
-		//	debugLastState=getCount(tested);
-		//}
+		//cout<<"tested size = "<<getCount(tested)<<endl;
 	}
 
 }
