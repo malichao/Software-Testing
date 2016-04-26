@@ -60,7 +60,10 @@ void reduce(vector<vector<bool> > &tests,vector<bool> &selected){
 	// Init the selected with the maximum coverage first
 	size_t i=findMaxRow(tests,selected);
 	vector<bool> tested(tests[0].size());
-	tested=tests[i];
+
+	//tested=tests[i];  //This line is buggy!
+	std::copy(tests[i].begin(),tests[i].end(),tested.begin());
+	cout<<"tested.size()="<<tested.size()<<endl;
 	selected[i]=true;
 	clearTo(tested,tests);
 
