@@ -28,7 +28,7 @@ void process(string inputName,string outputName,string ILPOutputName){
 
 		cout<<"Reducing test cases..\n";
 		//Read the test cases from file and convert them to bool vector
-		vector<vector<bool> > testCases;
+		vector<vector<bool> > *testCases=new vector<vector<bool> >;
 		while(!inputFile.eof()){
 			string temp;
 			getline(inputFile,temp);
@@ -42,26 +42,27 @@ void process(string inputName,string outputName,string ILPOutputName){
 				count++;
 			}
 			if(!row.empty())
-				testCases.push_back(row);
+				(*testCases).push_back(row);
 		}
-		vector<vector<bool> > testCasesCopy(testCases);
+		vector<vector<bool> > testCasesCopy(*testCases);
 		//Do the test reduction using Greedy algorithm
-		vector<bool> reducedCases;
-		vector<bool> coverage;
+		vector<bool> *reducedCases=new vector<bool>(testCases[0].size());
+		vector<bool> *coverage=new vector<bool>(testCases[0].size());
 		Greedy g;
 		size_t caseNum=g.getCount(testCasesCopy);
 		cout<<"\nTest cases number = "<<caseNum<<endl;
-		cout<<"Code Statement number = "<<testCases[0].size()<<endl;
-		cout<<"Coverage = "<<g.getCoverage(testCases,coverage)*100<<"%\n";
-		g.reduce(testCases,reducedCases);
+		cout<<"Code Statement number = "<<(*testCases)[0].size()<<endl;
+		size_t statementCoverage=g.getCoverage((*testCases),*coverage)*100;
+		cout<<"Coverage = "<<statementCoverage<<"%\n";
+		g.reduce(testCasesCopy,*reducedCases);
 
 		//Print the result
 		cout<<"Test Coverage Vector:\n";
-		for(auto c:coverage)	cout<<c<<" ";
+		for(auto c:*coverage)	cout<<c<<" ";
 
 		cout<<"\n\nReduction result:\n";
-		cout<<"Cases reduced = "<<caseNum-g.getCount(reducedCases)<<endl;
-		for(auto r:reducedCases)	cout<<r<<" ";
+		cout<<"Cases reduced = "<<caseNum-g.getCount(*reducedCases)<<endl;
+		for(auto r:*reducedCases)	cout<<r<<" ";
 		cout<<endl;
 
 		//Save the result into the file
@@ -70,7 +71,7 @@ void process(string inputName,string outputName,string ILPOutputName){
 			ofstream outputFile(outputName,ofstream::out);
 			outputFile.exceptions(ifstream::badbit);
 			outputFile<<"#Test Reduction Using Greedy Algorithm\n";
-			for(auto r:reducedCases)
+			for(auto r:*reducedCases)
 				outputFile<<r<<endl;
 			cout<<"Result was saved to \""<<outputName<<"\"\n";
 		}
@@ -84,23 +85,23 @@ void process(string inputName,string outputName,string ILPOutputName){
 
 			//State the objective,e.g., min t1 + t2 + t3 + t4;
 			out<<"min: t1";
-			for(size_t i=1;i<testCases.size();i++)
+			for(size_t i=1;i<(*testCases).size();i++)
 				out<<" + t"<<i+1;
 			out<<";\n";
 
 			//State the constraints,e.g.,1*x1 + 0*x2 + 0*x3 + 0*x4 >=1;
 			for(size_t j=0;j<testCases[0].size();j++){
-				if(testCases[0][j])
+				if((*testCases)[0][j])
 					out<<"1*t1";
 				else
 					out<<"0*t1";
-				for(size_t i=1;i<testCases.size();i++){
-					if(testCases[i][j])
+				for(size_t i=1;i<(*testCases).size();i++){
+					if((*testCases)[i][j])
 						out<<" + 1*t"<<i+1;
 					else
 						out<<" + 0*t"<<i+1;
 				}
-				if(coverage[j])
+				if((*coverage)[j])
 					out<<" >=1;\n";
 				else
 					out<<" >=0;\n";

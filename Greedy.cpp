@@ -9,6 +9,7 @@
 #include <vector>
 #include <numeric>
 #include <iostream>
+#include <memory>
 using namespace std;
 
 class Greedy{
@@ -30,10 +31,11 @@ double getCoverage(vector<vector<bool> > &tests,vector<bool> &coverage){
 
 	// Init the selected test cases
 	coverage.resize(tests[0].size(),false);
+	double size=coverage.size();
 	for(auto &t:tests)
 		addTo(t,coverage);
 	double num=std::accumulate(coverage.begin(),coverage.end(),0);
-	return num/coverage.size();
+	return num/size;
 }
 
 
@@ -41,14 +43,20 @@ double getCoverage(vector<vector<bool> > &tests,vector<bool> &coverage){
 // stored in vector 'selected' .
 void reduce(vector<vector<bool> > &tests,vector<bool> &selected){
 	// Init the selected test cases
-	selected.resize(tests.size(),false);
+	//selected.resize(tests.size(),false);
 
+	if(tests.empty()||tests[0].empty())
+		return;
+
+	size_t size=tests[0].size();
+	cout<<"size="<<size<<endl;
 	// Calculate the coverage of the original test cases
-	vector<bool> target(tests[0].size(),false);
-	for(auto &t:tests)
-		addTo(t,target);
+	std::unique_ptr<vector<bool> > target(new vector<bool>(size));
 
-	size_t debugTotal=getCount(target);		//for debugging
+	for(auto &t:tests)
+		addTo(t,*target);
+
+	//size_t debugTotal=getCount(*target);		//for debugging
 
 
 	// Init the selected with the maximum coverage first
@@ -58,22 +66,23 @@ void reduce(vector<vector<bool> > &tests,vector<bool> &selected){
 	selected[i]=true;
 	clearTo(tested,tests);
 
-	size_t debugLastState=getCount(tested);		//for debugging
+	//size_t debugLastState=getCount(tested);		//for debugging
 
 	// Iteratively select the test cases with the maximum additional coverage
 	// until the selected test cases cover all original test cases
-	while(tested!=target){
+	while(tested!=(*target)){
 		size_t j=findMaxRow(tests,selected);
 		addTo(tests[j],tested);
 		selected[j]=true;
 		clearTo(tested,tests);
 
 		//Print out the progress,for debugging
-		if(getCount(tested)>debugLastState){
-			cout<<"= ";
-			debugLastState=getCount(tested);
-		}
+		//if(getCount(tested)>debugLastState){
+		//	cout<<"= ";
+		//	debugLastState=getCount(tested);
+		//}
 	}
+
 }
 
 
