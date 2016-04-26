@@ -8,15 +8,18 @@
 
 #include <vector>
 #include <numeric>
+#include <iostream>
 using namespace std;
 
 class Greedy{
 public:
 
+//Count the number of test cases in a test suite
 size_t getCount(vector<vector<bool> > tests){
 	return tests.size();
 }
 
+//Count the number of covered statement in a test case
 size_t getCount(vector<bool> test){
 	return std::accumulate(test.begin(),test.end(),0);
 }
@@ -45,12 +48,17 @@ void reduce(vector<vector<bool> > tests,vector<bool> &selected){
 	for(auto &t:tests)
 		addTo(t,target);
 
+	size_t debugTotal=getCount(target);		//for debugging
+
+
 	// Init the selected with the maximum coverage first
 	size_t i=findMaxRow(tests,selected);
 	vector<bool> tested(tests[0].size());
 	tested=tests[i];
 	selected[i]=true;
 	clearTo(tested,tests);
+
+	size_t debugLastState=getCount(tested);		//for debugging
 
 	// Iteratively select the test cases with the maximum additional coverage
 	// until the selected test cases cover all original test cases
@@ -59,6 +67,12 @@ void reduce(vector<vector<bool> > tests,vector<bool> &selected){
 		addTo(tests[j],tested);
 		selected[j]=true;
 		clearTo(tested,tests);
+
+		//Print out the progress,for debugging
+		if(getCount(tested)>debugLastState){
+			cout<<"= ";
+			debugLastState=getCount(tested);
+		}
 	}
 }
 
