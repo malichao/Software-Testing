@@ -15,7 +15,7 @@ class Greedy{
 public:
 
 //Count the number of test cases in a test suite
-size_t getCount(vector<vector<bool> > tests){
+size_t getCount(vector<vector<bool> > &tests){
 	return tests.size();
 }
 
@@ -24,7 +24,7 @@ size_t getCount(vector<bool> test){
 	return std::accumulate(test.begin(),test.end(),0);
 }
 
-double getCoverage(vector<vector<bool> > tests,vector<bool> &coverage){
+double getCoverage(vector<vector<bool> > &tests,vector<bool> &coverage){
 	if(tests.empty()||tests[0].empty())
 		return 0;
 
@@ -39,7 +39,7 @@ double getCoverage(vector<vector<bool> > tests,vector<bool> &coverage){
 
 // Greedy algorithm to reduce redundant test cases,the reduced cases are
 // stored in vector 'selected' .
-void reduce(vector<vector<bool> > tests,vector<bool> &selected){
+void reduce(vector<vector<bool> > &tests,vector<bool> &selected){
 	// Init the selected test cases
 	selected.resize(tests.size(),false);
 

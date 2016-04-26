@@ -33,19 +33,23 @@ void process(string inputName,string outputName,string ILPOutputName){
 			string temp;
 			getline(inputFile,temp);
 			istringstream in(temp);
+			int size=temp.length();
 			bool value;
 			vector<bool> row;
-			while(in>>value)
+			int count=0;
+			while(in>>value){
 				row.push_back(value);
+				count++;
+			}
 			if(!row.empty())
 				testCases.push_back(row);
 		}
-
+		vector<vector<bool> > testCasesCopy(testCases);
 		//Do the test reduction using Greedy algorithm
 		vector<bool> reducedCases;
 		vector<bool> coverage;
 		Greedy g;
-		size_t caseNum=g.getCount(testCases);
+		size_t caseNum=g.getCount(testCasesCopy);
 		cout<<"\nTest cases number = "<<caseNum<<endl;
 		cout<<"Code Statement number = "<<testCases[0].size()<<endl;
 		cout<<"Coverage = "<<g.getCoverage(testCases,coverage)*100<<"%\n";
@@ -119,9 +123,10 @@ int main(int argc,char** argv){
 		throw std::invalid_argument("Argument number mismatched");
 */
 
-	char input[]="jstorm-masterMatrx";
-	char output[]="jstorm-masterMatrx-greedy";
-	char ilp[]="jstorm-masterMatrx-ilp";
+	char input[]="Debug/jstorm-masterMatrx";
+	char output[]="Debug/jstorm-masterMatrx-greedy";
+	char ilp[]="Debug/jstorm-masterMatrx-ilp";
+	cout<<input<<endl;
 	process(input,output,ilp);
 
 }
