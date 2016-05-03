@@ -96,6 +96,12 @@ void process(string inputName,string outputName,string ILPOutputName){
 				out<<" + t"<<i+1;
 			out<<";\n";
 
+			//Declare all the variables to be integers
+			out<<"\nint ";
+			for(size_t i=1;i<testCases.size();i++)
+				out<<"t"<<i<<",";
+			out<<"t"<<testCases.size()<<";\n\n";	//Last variable
+
 			//State the constraints,e.g.,1*x1 + 0*x2 + 0*x3 + 0*x4 >=1;
 			for(size_t j=0;j<testCases[0].size();j++){
 				if(testCases[0][j])
