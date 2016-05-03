@@ -41,6 +41,18 @@ void process(string inputName,string outputName,string ILPOutputName){
 				testCases.push_back(row);
 		}
 
+		//Check if all the test cases are of the same length
+		size_t size=testCases[0].size();
+		int i=0;
+		for(auto &t:testCases){
+			if(t.size()!=size){
+				cout<<"Error,Test cases are not different length!\n";
+				cout<<"case[0].size()="<<size<<" case["<<i<<"].size="<<t.size()<<endl;
+				return;
+			}
+			i++;
+		}
+
 		//Do the test reduction using Greedy algorithm
 		vector<bool> reducedCases;
 		vector<bool> coverage;
