@@ -115,7 +115,7 @@ void process(string inputName,string outputName,string ILPOutputName){
 }
 
 int main(int argc,char** argv){
-/*
+
 	if(2==argc){
 		process(argv[1], string(argv[1])+"-greedy", string(argv[1])+"-ilp");
 	}
@@ -123,12 +123,12 @@ int main(int argc,char** argv){
 		process(argv[1], argv[2], argv[3]);
 	else
 		throw std::invalid_argument("Argument number mismatched");
-*/
 
+/*
 	char input[]="Debug/jstorm-masterMatrx";
 	char output[]="Debug/jstorm-masterMatrx-greedy";
 	char ilp[]="Debug/jstorm-masterMatrx-ilp";
 	cout<<input<<endl;
 	process(input,output,ilp);
-
+*/
 }

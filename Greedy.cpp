@@ -60,16 +60,11 @@ void reduce(vector<vector<bool> > &tests,vector<bool> &selected){
 	// Init the selected with the maximum coverage first
 	size_t i=findMaxRow(tests,selected);
 	vector<bool> tested(tests[0].size());
-
-	//tested=tests[i];  //This line is buggy!
-	std::copy(tests[i].begin(),tests[i].end(),tested.begin());
-	cout<<"tested.size()="<<tested.size()<<endl;
+	tested=tests[i];  //This line is buggy!
+	//std::copy(tests[i].begin(),tests[i].end(),tested.begin());
 	selected[i]=true;
 	clearTo(tested,tests);
 
-	size_t debugLastState=getCount(tested);		//for debugging
-	cout<<"total size = "<<getCount(*target)<<endl;
-	cout<<"tested size = "<<getCount(tested)<<endl;
 	// Iteratively select the test cases with the maximum additional coverage
 	// until the selected test cases cover all original test cases
 	while(tested!=(*target)){
