@@ -3,7 +3,9 @@
  Date  		: Apr 15,2016
  Version	: v0.1
  Description:
-	-v0.1	A IO function for reading test cases and writing results.
+	-v0.3	Add batch processing.
+ 	-v0.2	Convert test cases into ILP models.
+	-v0.1	An IO function for reading test cases and writing results.
  *****************************************************************************/
 #include <iostream>
 #include <stdlib.h>
@@ -84,6 +86,23 @@ void saveILPModel(  const string outputName,
 		out<<"t"<<i<<",";
 	out<<"t"<<testCases.size()<<";\n\n";	//Last variable
 
+}
+
+//Solve ILP model by calling lp_solve from command line
+//lp_solve use the following command format:
+//lp_solve.exe [input_name] > [output_name]
+void ilpSolve(const string &fileName){
+	string command;
+	string lpsolvePath="lp_solve\\lp_solve.exe";
+	string outputPath="result\\ilp\\ilp_result\\";
+	cout<<"Start solving ILP models\n";
+
+	command=lpsolvePath+
+			" result\\ilp\\"+fileName+"-ilp > "+
+			outputPath+fileName+"-ilp_result";
+
+	cout<<command<<endl;
+	system(command.c_str());
 }
 
 void process(string inputName,string outputName,string ILPOutputName){
@@ -186,20 +205,28 @@ void readFile(char *folderName, vector<string> &files) {
 		cout << f << endl;
 }
 
-//Command format inputFolderName > outputFolderName
+void mkdir(string name){
+	string mkdir("mkdir ");
+	string command=mkdir+name;
+	system(command.c_str());
+	cout<<command<<endl;
+}
+
+
+
+//Command format [inputFolderName] [outputFolderName],example:
+//TestReduction.exe test_cases\ result\
 int main(int argc,char** argv){
 	if(argc!=3)
 		throw std::invalid_argument("Argument number mismatched");
 	string path(argv[1]);
 	vector<string> files;
 	readFile(argv[1],files);
-	string mkdir("mkdir ");
-	string command=mkdir+argv[2];
-	cout<<command<<endl;
-	system(command.c_str());
-	command=mkdir+argv[2]+"ilp";
-	cout<<command<<endl;
-	system(command.c_str());
+
+	//Create folder for storing result
+	mkdir(string(argv[2]));
+	mkdir(string(argv[2])+"ilp");
+	mkdir(string(argv[2])+"ilp\\ilp_result");
 
 	//Notice that the first two lines of the lists are '.' and "..",so we should
 	//ingore the first two lines
@@ -207,32 +234,20 @@ int main(int argc,char** argv){
 		if(!files[i].empty()){
 			cout<<"\n============================================\n";
 			cout<<"Processing "<<files[i]<<endl;
-			process(path+files[i], "result/"+files[i]+"-greedy", "result/ilp/"+files[i]+"-ilp");
+			process(path+files[i],
+					"result/"+files[i]+"-greedy",
+					"result/ilp/"+files[i]+"-ilp");
 		}
 	}
 
 	//Calling lp_solve to solve the ilp problems
-	command=mkdir+argv[2]+"ilp\\ilp_result";
-	cout<<command<<endl;
-	system(command.c_str());
-	string lpsolvePath="lp_solve\\lp_solve.exe";
-	string outputPath="result\\ilp\\ilp_result\\";
-	cout<<"Start solving ILP models\n";
+
 
 	for(size_t i=2;i<files.size();i++){
 		if(!files[i].empty()){
 			cout<<"\n============================================\n";
 			cout<<"Solving ILP model "<<files[i]<<endl;
-			command=lpsolvePath+" result\\ilp\\"+files[i]+"-ilp > "+outputPath+files[i]+"-ilp_result";
-			cout<<command<<endl;
-			system(command.c_str());
+			ilpSolve(files[i]);
 		}
 	}
-
-/*
-	char input[]="Debug/test_case1.txt";
-	char output[]="Debug/result.txt";
-	char ilp[]="Debug/ilp.txt";
-	process(input,output,ilp);
-*/
 }
