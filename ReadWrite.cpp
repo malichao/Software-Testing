@@ -12,6 +12,7 @@
 #include <stdexcept>
 #include <cstring>
 #include "Greedy.cpp"
+#include "dirent.h"
 
 void process(string inputName,string outputName,string ILPOutputName){
 	using namespace std;
@@ -77,7 +78,7 @@ void process(string inputName,string outputName,string ILPOutputName){
 			cout<<"\nOpening \""<<outputName<<"\"\n";
 			ofstream outputFile(outputName,ofstream::out);
 			outputFile.exceptions(ifstream::badbit);
-			outputFile<<"#Test Reduction Using Greedy Algorithm\n";
+			//outputFile<<"#Test Reduction Using Greedy Algorithm\n";
 			for(auto r:reducedCases)
 				outputFile<<r<<endl;
 			cout<<"Result was saved to \""<<outputName<<"\"\n";
@@ -127,14 +128,44 @@ void process(string inputName,string outputName,string ILPOutputName){
 		std::cerr<<e.what()<<endl;
 	}
 }
-/*
+
+void readFile(int argc,char** argv,vector<string> &files){
+	  // check command line arguments
+	  if (argc <= 1) {
+	    return ;
+	  }
+
+	  // print contents of directories listed in command line
+	  int i=1;
+	  while (i < argc) {
+	    DIR *dir;
+	    struct dirent *ent;
+
+	    // open directory stream
+	    dir = opendir (argv[i]);
+	    if (dir != NULL) {
+
+	      // print all the files and directories within directory
+	      while ((ent = readdir (dir)) != NULL) {
+	    	  files.emplace_back(ent->d_name);
+	    	  //printf ("%s\n", ent->d_name);
+	      }
+
+	      closedir (dir);
+	    } else {
+	      // could not open directory
+	      perror ("");
+	      return;
+	    }
+	    i++;
+	  }
+}
+
 int main(int argc,char** argv){
 	if(argc<2)
 		throw std::invalid_argument("Argument number mismatched");
 	for(int i=1;i<argc;i++)
 		process(argv[i], "result/"+string(argv[i])+"-greedy", "result/ilp/"+string(argv[i])+"-ilp");
-
-
 
 /*
 	char input[]="Debug/test_case1.txt";
@@ -142,4 +173,4 @@ int main(int argc,char** argv){
 	char ilp[]="Debug/ilp.txt";
 	process(input,output,ilp);
 */
-//}
+}
