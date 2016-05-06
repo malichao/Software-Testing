@@ -6,6 +6,7 @@
 	-v0.1	A IO function for reading test cases and writing results.
  *****************************************************************************/
 #include <iostream>
+#include <stdlib.h>
 #include <iterator>
 #include <fstream>
 #include <sstream>
@@ -132,46 +133,52 @@ void process(string inputName,string outputName,string ILPOutputName){
 	}
 }
 
-void readFile(int argc,char** argv,vector<string> &files){
-	  // check command line arguments
-	  if (argc <= 1) {
-	    return ;
-	  }
+void readFile(char *folderName, vector<string> &files) {
+	// check command line arguments
+	if (folderName==NULL) {
+		return;
+	}
 
-	  // print contents of directories listed in command line
-	  int i=1;
-	  while (i < argc) {
-	    DIR *dir;
-	    struct dirent *ent;
+	// print contents of directories listed in command line
 
-	    // open directory stream
-	    dir = opendir (argv[i]);
-	    if (dir != NULL) {
+	DIR *dir;
+	struct dirent *ent;
 
-	      // print all the files and directories within directory
-	      while ((ent = readdir (dir)) != NULL) {
-	    	  files.emplace_back(ent->d_name);
-	    	  //printf ("%s\n", ent->d_name);
-	      }
+	// open directory stream
+	dir = opendir(folderName);
+	if (dir != NULL) {
 
-	      closedir (dir);
-	    } else {
-	      // could not open directory
-	      perror ("");
-	      return;
-	    }
-	    i++;
-	  }
-	  for(auto f:files)
-		  cout<<f<<endl;
+		// print all the files and directories within directory
+		while ((ent = readdir(dir)) != NULL) {
+			files.emplace_back(ent->d_name);
+			//printf ("%s\n", ent->d_name);
+		}
+
+		closedir(dir);
+	} else {
+		// could not open directory
+		perror("");
+		return;
+	}
+
+	for (auto f : files)
+		cout << f << endl;
 }
 
+//Command format inputFolderName > outputFolderName
 int main(int argc,char** argv){
-	if(argc<2)
+	if(argc!=3)
 		throw std::invalid_argument("Argument number mismatched");
 	string path(argv[1]);
 	vector<string> files;
-	readFile(argc,argv,files);
+	readFile(argv[1],files);
+	string mkdir("mkdir ");
+	string command=mkdir+argv[2];
+	cout<<command<<endl;
+	system(command.c_str());
+	command=mkdir+argv[2]+"ilp";
+	cout<<command<<endl;
+	system(command.c_str());
 	for(size_t i=2;i<files.size();i++){
 		if(!files[i].empty()){
 			cout<<"\n============================================\n";
