@@ -10,7 +10,6 @@
 #include <fstream>
 #include <sstream>
 #include <stdexcept>
-#include <cstring>
 #include "Greedy.cpp"
 #include "dirent.h"
 
@@ -26,6 +25,10 @@ void process(string inputName,string outputName,string ILPOutputName){
 		//badbit:	Read/writing error on i/o operation
 		//failbit:	Logical error on i/o operation
 		inputFile.exceptions(ifstream::badbit);
+		if(!inputFile.is_open()){
+			cout<<"File could not be opened\n";
+			return;
+		}
 
 		cout<<"Reducing test cases..\n";
 		//Read the test cases from file and convert them to bool vector
@@ -159,13 +162,23 @@ void readFile(int argc,char** argv,vector<string> &files){
 	    }
 	    i++;
 	  }
+	  for(auto f:files)
+		  cout<<f<<endl;
 }
 
 int main(int argc,char** argv){
 	if(argc<2)
 		throw std::invalid_argument("Argument number mismatched");
-	for(int i=1;i<argc;i++)
-		process(argv[i], "result/"+string(argv[i])+"-greedy", "result/ilp/"+string(argv[i])+"-ilp");
+	string path(argv[1]);
+	vector<string> files;
+	readFile(argc,argv,files);
+	for(size_t i=2;i<files.size();i++){
+		if(!files[i].empty()){
+			cout<<"\n============================================\n";
+			cout<<"Processing "<<files[i]<<endl;
+			process(path+files[i], "result/"+files[i]+"-greedy", "result/ilp/"+files[i]+"-ilp");
+		}
+	}
 
 /*
 	char input[]="Debug/test_case1.txt";
