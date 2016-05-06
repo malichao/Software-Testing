@@ -1,8 +1,0 @@
-
-Value of objective function: 2.00000000
-
-Actual values of the variables:
-t1                              1
-t2                              1
-t3                              0
-t4                              0

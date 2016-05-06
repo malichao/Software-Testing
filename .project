@@ -26,7 +26,7 @@
 	</natures>
 	<filteredResources>
 		<filter>
-			<id>1459703549663</id>
+			<id>1462565048873</id>
 			<name></name>
 			<type>10</type>
 			<matcher>
@@ -35,7 +35,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1459703549678</id>
+			<id>1462565048887</id>
 			<name></name>
 			<type>6</type>
 			<matcher>
@@ -44,7 +44,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1459703549697</id>
+			<id>1462565048902</id>
 			<name></name>
 			<type>6</type>
 			<matcher>
@@ -53,12 +53,39 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1459703549716</id>
+			<id>1462565048913</id>
 			<name></name>
 			<type>6</type>
 			<matcher>
 				<id>org.eclipse.ui.ide.multiFilter</id>
 				<arguments>1.0-name-matches-false-false-*.docx</arguments>
+			</matcher>
+		</filter>
+		<filter>
+			<id>1462565048923</id>
+			<name></name>
+			<type>10</type>
+			<matcher>
+				<id>org.eclipse.ui.ide.multiFilter</id>
+				<arguments>1.0-name-matches-false-false-Example</arguments>
+			</matcher>
+		</filter>
+		<filter>
+			<id>1462565048935</id>
+			<name></name>
+			<type>14</type>
+			<matcher>
+				<id>org.eclipse.ui.ide.multiFilter</id>
+				<arguments>1.0-name-matches-false-false-*.rar</arguments>
+			</matcher>
+		</filter>
+		<filter>
+			<id>1462565048946</id>
+			<name></name>
+			<type>10</type>
+			<matcher>
+				<id>org.eclipse.ui.ide.multiFilter</id>
+				<arguments>1.0-name-matches-false-false-lp_solve</arguments>
 			</matcher>
 		</filter>
 	</filteredResources>
