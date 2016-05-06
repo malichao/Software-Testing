@@ -127,7 +127,7 @@ void process(string inputName,string outputName,string ILPOutputName){
 		std::cerr<<e.what()<<endl;
 	}
 }
-
+/*
 int main(int argc,char** argv){
 	if(argc<2)
 		throw std::invalid_argument("Argument number mismatched");
@@ -142,4 +142,4 @@ int main(int argc,char** argv){
 	char ilp[]="Debug/ilp.txt";
 	process(input,output,ilp);
 */
-}
+//}
