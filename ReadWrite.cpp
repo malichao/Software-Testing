@@ -14,6 +14,78 @@
 #include "Greedy.cpp"
 #include "dirent.h"
 
+void convertTextToBool(ifstream &inputFile,vector<vector<bool> > &testCases){
+	//Read the test cases from file and convert them to bool vector
+	while(!inputFile.eof()){
+		string temp;
+		getline(inputFile,temp);
+		istringstream in(temp);
+		bool value;
+		vector<bool> row;
+		while(in>>value)
+			row.push_back(value);
+		if(!row.empty())
+			testCases.push_back(row);
+	}
+}
+
+void saveFile(string outputName,vector<bool> &result){
+	//Save the result into the file
+	if(outputName.length()){
+		ofstream outputFile(outputName,ofstream::out);
+		outputFile.exceptions(ifstream::badbit);
+		//outputFile<<"#Test Reduction Using Greedy Algorithm\n";
+		for(auto r:result)
+			outputFile<<r<<endl;
+	}
+}
+
+void saveILPModel(  const string outputName,
+					const vector<vector<bool> > &testCases,
+					const vector<bool> &coverage){
+	//Convert the test cases to ILP model and then use lp_solve program to
+	//solve the ILP.
+	if(outputName.empty()){
+		return;
+	}
+
+	cout<<"Opening \""<<outputName<<"\"\n";
+	ofstream out(outputName,ofstream::out);
+	out.exceptions(ifstream::badbit);
+
+	//State the objective,e.g., min t1 + t2 + t3 + t4;
+	out<<"min: t1";
+	for(size_t i=1;i<testCases.size();i++)
+		out<<" + t"<<i+1;
+	out<<";\n";
+
+	//State the constraints,e.g.,1*x1 + 0*x2 + 0*x3 + 0*x4 >=1;
+	for(size_t j=0;j<testCases[0].size();j++){
+		if(testCases[0][j])
+			out<<"1*t1";
+		else
+			out<<"0*t1";
+		for(size_t i=1;i<testCases.size();i++){
+			if(testCases[i][j])
+				out<<" + 1*t"<<i+1;
+			else
+				out<<" + 0*t"<<i+1;
+		}
+		if(coverage[j])
+			out<<" >=1;\n";
+		else
+			out<<" >=0;\n";
+	}
+
+	//Declare all the variables to be integers,otherwise there will be
+	//float type result
+	out<<"\nint ";
+	for(size_t i=1;i<testCases.size();i++)
+		out<<"t"<<i<<",";
+	out<<"t"<<testCases.size()<<";\n\n";	//Last variable
+
+}
+
 void process(string inputName,string outputName,string ILPOutputName){
 	using namespace std;
 	//Reading the input
@@ -34,17 +106,7 @@ void process(string inputName,string outputName,string ILPOutputName){
 		cout<<"Reducing test cases..\n";
 		//Read the test cases from file and convert them to bool vector
 		vector<vector<bool> > testCases;
-		while(!inputFile.eof()){
-			string temp;
-			getline(inputFile,temp);
-			istringstream in(temp);
-			bool value;
-			vector<bool> row;
-			while(in>>value)
-				row.push_back(value);
-			if(!row.empty())
-				testCases.push_back(row);
-		}
+		convertTextToBool(inputFile,testCases);
 
 		//Check if all the test cases are of the same length
 		size_t size=testCases[0].size();
@@ -78,61 +140,20 @@ void process(string inputName,string outputName,string ILPOutputName){
 		cout<<endl;
 
 		//Save the result into the file
-		if(outputName.length()){
-			cout<<"\nOpening \""<<outputName<<"\"\n";
-			ofstream outputFile(outputName,ofstream::out);
-			outputFile.exceptions(ifstream::badbit);
-			//outputFile<<"#Test Reduction Using Greedy Algorithm\n";
-			for(auto r:reducedCases)
-				outputFile<<r<<endl;
-			cout<<"Result was saved to \""<<outputName<<"\"\n";
-		}
+		saveFile(outputName,reducedCases);
+		cout<<"Greedy result was saved to \""<<outputName<<"\"\n";
 
 		//Convert the test cases to ILP model and then use lp_solve program to
 		//solve the ILP.
-		if(ILPOutputName.length()){
-			cout<<"Opening \""<<ILPOutputName<<"\"\n";
-			ofstream out(ILPOutputName,ofstream::out);
-			out.exceptions(ifstream::badbit);
+		saveILPModel(ILPOutputName,testCases,coverage);
+		cout<<"ILP model was saved to \""<<ILPOutputName<<"\"\n";
 
-			//State the objective,e.g., min t1 + t2 + t3 + t4;
-			out<<"min: t1";
-			for(size_t i=1;i<testCases.size();i++)
-				out<<" + t"<<i+1;
-			out<<";\n";
-
-			//State the constraints,e.g.,1*x1 + 0*x2 + 0*x3 + 0*x4 >=1;
-			for(size_t j=0;j<testCases[0].size();j++){
-				if(testCases[0][j])
-					out<<"1*t1";
-				else
-					out<<"0*t1";
-				for(size_t i=1;i<testCases.size();i++){
-					if(testCases[i][j])
-						out<<" + 1*t"<<i+1;
-					else
-						out<<" + 0*t"<<i+1;
-				}
-				if(coverage[j])
-					out<<" >=1;\n";
-				else
-					out<<" >=0;\n";
-			}
-
-			//Declare all the variables to be integers,otherwise there will be
-			//float type result
-			out<<"\nint ";
-			for(size_t i=1;i<testCases.size();i++)
-				out<<"t"<<i<<",";
-			out<<"t"<<testCases.size()<<";\n\n";	//Last variable
-
-			cout<<"ILP model was saved to \""<<ILPOutputName<<"\"\n";
-		}
 	}catch(exception& e){
 		std::cerr<<e.what()<<endl;
 	}
 }
 
+//Read all the files within a folder
 void readFile(char *folderName, vector<string> &files) {
 	// check command line arguments
 	if (folderName==NULL) {
@@ -179,7 +200,9 @@ int main(int argc,char** argv){
 	command=mkdir+argv[2]+"ilp";
 	cout<<command<<endl;
 	system(command.c_str());
-	/*
+
+	//Notice that the first two lines of the lists are '.' and "..",so we should
+	//ingore the first two lines
 	for(size_t i=2;i<files.size();i++){
 		if(!files[i].empty()){
 			cout<<"\n============================================\n";
@@ -187,17 +210,19 @@ int main(int argc,char** argv){
 			process(path+files[i], "result/"+files[i]+"-greedy", "result/ilp/"+files[i]+"-ilp");
 		}
 	}
-*/
-	//Calling lp_solve
+
+	//Calling lp_solve to solve the ilp problems
 	command=mkdir+argv[2]+"ilp\\ilp_result";
 	cout<<command<<endl;
 	system(command.c_str());
 	string lpsolvePath="lp_solve\\lp_solve.exe";
 	string outputPath="result\\ilp\\ilp_result\\";
+	cout<<"Start solving ILP models\n";
+
 	for(size_t i=2;i<files.size();i++){
 		if(!files[i].empty()){
 			cout<<"\n============================================\n";
-			cout<<"Processing "<<files[i]<<endl;
+			cout<<"Solving ILP model "<<files[i]<<endl;
 			command=lpsolvePath+" result\\ilp\\"+files[i]+"-ilp > "+outputPath+files[i]+"-ilp_result";
 			cout<<command<<endl;
 			system(command.c_str());
