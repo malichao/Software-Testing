@@ -1,3 +1,0 @@
-org.I0Itec.zkclient.ServerZkClientTest.testRetryUntilConnected
-org.I0Itec.zkclient.util.ZkPathUtilTest.testToString
-org.I0Itec.zkclient.util.ZkPathUtilTest.testLeadingZeros

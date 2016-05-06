@@ -179,11 +179,28 @@ int main(int argc,char** argv){
 	command=mkdir+argv[2]+"ilp";
 	cout<<command<<endl;
 	system(command.c_str());
+	/*
 	for(size_t i=2;i<files.size();i++){
 		if(!files[i].empty()){
 			cout<<"\n============================================\n";
 			cout<<"Processing "<<files[i]<<endl;
 			process(path+files[i], "result/"+files[i]+"-greedy", "result/ilp/"+files[i]+"-ilp");
+		}
+	}
+*/
+	//Calling lp_solve
+	command=mkdir+argv[2]+"ilp\\ilp_result";
+	cout<<command<<endl;
+	system(command.c_str());
+	string lpsolvePath="lp_solve\\lp_solve.exe";
+	string outputPath="result\\ilp\\ilp_result\\";
+	for(size_t i=2;i<files.size();i++){
+		if(!files[i].empty()){
+			cout<<"\n============================================\n";
+			cout<<"Processing "<<files[i]<<endl;
+			command=lpsolvePath+" result\\ilp\\"+files[i]+"-ilp > "+outputPath+files[i]+"-ilp_result";
+			cout<<command<<endl;
+			system(command.c_str());
 		}
 	}
 
