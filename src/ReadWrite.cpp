@@ -91,15 +91,14 @@ void saveILPModel(  const string outputName,
 //Solve ILP model by calling lp_solve from command line
 //lp_solve use the following command format:
 //lp_solve.exe [input_name] > [output_name]
-void ilpSolve(const string &fileName){
+void ilpSolve(const string &inputFile,const string &outputPath){
 	string command;
 	string lpsolvePath="lp_solve\\lp_solve.exe";
-	string outputPath="result\\ilp\\ilp_result\\";
 	cout<<"Start solving ILP models\n";
 
 	command=lpsolvePath+
-			" result\\ilp\\"+fileName+"-ilp > "+
-			outputPath+fileName+"-ilp_result";
+			" result\\ilp\\"+inputFile+"-ilp > "+
+			outputPath+inputFile+"-ilp_result";
 
 	cout<<command<<endl;
 	system(command.c_str());
@@ -208,25 +207,33 @@ void readFile(char *folderName, vector<string> &files) {
 void mkdir(string name){
 	string mkdir("mkdir ");
 	string command=mkdir+name;
-	system(command.c_str());
 	cout<<command<<endl;
+	system(command.c_str());
 }
 
 
 
 //Command format [inputFolderName] [outputFolderName],example:
-//TestReduction.exe test_cases\ result\
+//"TestReduction.exe test_cases\ result\"
 int main(int argc,char** argv){
+//int main(){
+//	char argc=3;
+//	char argv[][50]={"TestReduction.exe","test_cases\\","result\\"};
 	if(argc!=3)
 		throw std::invalid_argument("Argument number mismatched");
+
 	string path(argv[1]);
 	vector<string> files;
 	readFile(argv[1],files);
 
+	string outputPathGreedy(argv[2]);
+	string outputPathILPModel(string(argv[2])+"ilp\\");
+	string outputPathILPResult(string(argv[2])+"ilp\\ilp_result\\");
+
 	//Create folder for storing result
-	mkdir(string(argv[2]));
-	mkdir(string(argv[2])+"ilp");
-	mkdir(string(argv[2])+"ilp\\ilp_result");
+	mkdir(outputPathGreedy);
+	mkdir(outputPathILPModel);
+	mkdir(outputPathILPResult);
 
 	//Notice that the first two lines of the lists are '.' and "..",so we should
 	//ingore the first two lines
@@ -235,8 +242,8 @@ int main(int argc,char** argv){
 			cout<<"\n============================================\n";
 			cout<<"Processing "<<files[i]<<endl;
 			process(path+files[i],
-					"result/"+files[i]+"-greedy",
-					"result/ilp/"+files[i]+"-ilp");
+					outputPathGreedy+files[i]+"-greedy",
+					outputPathILPModel+files[i]+"-ilp");
 		}
 	}
 
@@ -247,7 +254,7 @@ int main(int argc,char** argv){
 		if(!files[i].empty()){
 			cout<<"\n============================================\n";
 			cout<<"Solving ILP model "<<files[i]<<endl;
-			ilpSolve(files[i]);
+			ilpSolve(files[i],outputPathILPResult);
 		}
 	}
 }
