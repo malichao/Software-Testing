@@ -30,12 +30,12 @@ Before you use our tools please make sure you installed the following tools/fram
   * Eclipse (for verifying the result)
 
 After installing all the dependencies,you could start using our tools to perform test reduction.All the tools and test projects are provided in the 'Example' folder.Here's a short description of each folders/files:
-  * test projects.rar           :Contains all the test projects we used.
-  * coverage.py,traverse.py     :Tools for extracting test coverage information
-  * projects_test_coverage      :Extracted test coverage information
-  * TestReduction.exe           :Includes greedy algorithm,ILP models generation,and calling lp_solve to solve the models
-  * lp_solve                    :Contains all the files needed to solve ILP model
-  * result.rar                  :The reduced test cases we've got using our tools
+  * test projects.rar --------- :Contains all the test projects we used.
+  * coverage.py,traverse.py --- :Tools for extracting test coverage information
+  * projects_test_coverage ---- :Extracted test coverage information
+  * TestReduction.exe --------- :Includes greedy algorithm,ILP models generation,and calling lp_solve to solve the models
+  * lp_solve ------------------ :Contains all the files needed to solve ILP model
+  * result.rar ---------------- :The reduced test cases we've got using our tools
   
 ### Step 1 Build and Run the Test Cases ###
 
