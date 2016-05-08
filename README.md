@@ -22,12 +22,12 @@ In this project we used input files since it's easier to program comparing to th
 ### Dependency ###
 
 Before you use our tools please make sure you installed the following tools/frameworks properly. Since lp_solve only works on Windows platform so our tools are designed for windows as well.But they should work on other platforms with minor modification as most of the codes are really portable.
-  *Apache Maven 3.3.9 
-  *Clover-for-Maven
-  *Python2.7 (for running the tool that extracts test information)
-  *Gcc and Eclipse CDT,or Visual Studio (only needed if you want to re-compile our code)
-  *Java(TM) SE Runtime Environment (build 1.8.0_77-b03)
-  *Eclipse (for verifying the result)
+  * Apache Maven 3.3.9 
+  * Clover-for-Maven
+  * Python2.7 (for running the tool that extracts test information)
+  * Gcc and Eclipse CDT,or Visual Studio (only needed if you want to re-compile our code)
+  * Java(TM) SE Runtime Environment (build 1.8.0_77-b03)
+  * Eclipse (for verifying the result)
 
 ### Step 1 Build and Run the Test Cases ###
 
