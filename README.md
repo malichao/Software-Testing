@@ -32,11 +32,12 @@ Before you use our tools please make sure you installed the following tools/fram
 After installing all the dependencies,you could start using our tools to perform test reduction.All the tools and test projects are provided in the 'Example' folder.Here's a short description of each folders/files:
 
   	test projects.rar --------- :Contains all the test projects we used.
-	coverage.py,traverse.py --- :Tools for extracting test coverage information
+	coverage.py --------------- :Tool for extracting test coverage information
 	projects_test_coverage ---- :Extracted test coverage information
-  	TestReduction.exe --------- :Includes greedy algorithm,ILP models generation,and calling lp_solve to solve the models
+  	TestReduction.exe --------- :Greedy algorithm,ILP models generation,and calling lp_solve to solve the models
 	lp_solve ------------------ :Contains all the files needed to solve ILP model
   	result.rar ---------------- :The reduced test cases we've got using our tools
+  	ASM ----------------------- :Contains Java codes to remove test cases
   
 ### Step 1 Build and Run the Test Cases ###
 
@@ -47,6 +48,14 @@ All the test projects we used could be found in Example/test projects.rar ,after
 	mvn clover:aggregate clover:clover
 
 ### Step 2 Extract Test Coverage data ###
+
+Extracting test coverage data could be done by simply running the program 'Coverage.py'. Here' the format of the command:
+
+	python Coverage.py PATH
+	
+For example,if the projects is under the folder '/user/CourseProject/ProjectA',then the above command becomes:
+
+	python Coverage.py /user/CourseProject/
 
 ### Step 3 Perform Test Reduction ###
 Test reduction is done by using only one line of command.The command format is like:
@@ -113,5 +122,9 @@ The above program use greedy to detect the duplicated test cases and we could se
 Lastly we can see all the reduced test cases in the 'result' folder.
 
 ### Step 4 Apply Reduced Test Cases Back to the Projects ###
+
+After generating the reduced test cases,we need to apply the result back to the original projects.This process could be done by calling the following command:
+
+	java -cp PATHTO\ASM\bin\;PATHTO\ASM\lib\asm-all-5.0.3.jar Myown.RemoveMethod OriginalClassfile NewClassfileafterreduction NameOfTestcase
 
 ### Step 5 Compare Result with Mutation Test ###
