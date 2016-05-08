@@ -1,0 +1,28 @@
+package Myown;
+
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+
+import org.objectweb.asm.*;
+public class RemoveMethodAdapter extends ClassVisitor {
+ private static final int ASM4 = 262144;
+ private String mName;
+ private String mDesc;
+ public RemoveMethodAdapter( ClassVisitor cv, String mName, String mDesc) {
+    super(ASM4, cv);
+    this.mName = mName;
+    this.mDesc = mDesc;
+}
+@Override
+public MethodVisitor visitMethod(int access, String name,
+String desc, String signature, String[] exceptions) {
+//if (name.equals("m2") && desc.equals("()V")) {
+	if (name.equals("mName") ) {
+// do not delegate to next visitor -> this removes the method
+return null;
+}
+return cv.visitMethod(access, name, desc, signature, exceptions);
+}
+}

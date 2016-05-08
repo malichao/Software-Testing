@@ -2,7 +2,7 @@
 import os
 import sys
 
-root='E:\Study\Test'
+root=sys.argv[1]
 #root=sys.argv[1]
 #outname=sys.argv[1].split('Test/')[1].split('/')[0]
 #split=root.split('clover/')[1]
@@ -28,18 +28,15 @@ for i in AllDocuments:
 
 finalDocs=[]
 for i in AllDoc:
- if 'target'==i.split('/')[4]:
+ if '/target/' in i:
   finalDocs.append(i)
 root=[]
+print(finalDocs)
+for i in range(0,len(finalDocs)):
+ root.append(finalDocs[i])
 
-#for i in range(1,len(finalDocs)):
-# root.append(finalDocs[i])
-#print(root)
-root=['E:/Study/Test/stripe-java-master/target/site/clover/com',
-'E:/Study/Test/twilio-java-master/target/site/clover/com',
-'E:/Study/Test/unirest-java-master/target/site/clover/com']
+
 for rooot in root:
-#rooot='E:/Study/Test/sonar-java-master/target/site/clover/org'
  outname=rooot.split('Test/')[1].split('/')[0]
  split=rooot.split('clover/')[1]
  AllDocuments=[]                                  ##paths of all files(html and js)
