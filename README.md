@@ -29,7 +29,21 @@ Before you use our tools please make sure you installed the following tools/fram
   * Java(TM) SE Runtime Environment (build 1.8.0_77-b03)
   * Eclipse (for verifying the result)
 
+After installing all the dependencies,you could start using our tools to perform test reduction.All the tools and test projects are provided in the 'Example' folder.Here's a short description of each folders/files:
+  * test projects.rar		:Contains all the test projects we used.
+  * coverage.py,traverse.py	:Tools for extracting test coverage information
+  * projects_test_coverage	:Extracted test coverage information
+  * TestReduction.exe		:Includes greedy algorithm,ILP models generation,and calling lp_solve to solve the models
+  * lp_solve			:Contains all the files needed to solve ILP model
+  * result.rar			:The reduced test cases we've got using our tools
+  
 ### Step 1 Build and Run the Test Cases ###
+
+All the test projects we used could be found in Example/test projects.rar ,after unzipping the file we could use the following command to build these projects and generate test coverage information. Take 'aalto-xml' project as example:
+
+	cd aalto-xml-master
+	mvn clean clover:setup test 
+	mvn clover:aggregate clover:clover
 
 ### Step 2 Extract Test Coverage data ###
 
