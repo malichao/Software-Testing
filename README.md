@@ -1,5 +1,5 @@
 # Test Reduction
-A Study of Greedy and ILP Techniques in Test Reduction
+##A Study of Greedy and ILP Techniques in Test Reduction
 
 ###Overview
 In this project we studied the techniques used in test reduction,specifically greedy and linear programming(ILP) algorithm. We applied these algorithms in 20 opensource Java projects and the experiment showed that they were really efficient in detecting redundant test cases. 
