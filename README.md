@@ -152,4 +152,8 @@ The configuration of PIT is like following:
 
 Then we calculating the ratio of “Killed” with all mutants to evaluate ILP and Greedy according to the PITest report) .For example
 
+	<mutation detected='false' status='SURVIVED'><sourceFile>ChannelManager.java</sourceFile><mutatedClass>org.asteriskjava.live.internal.ChannelManager</mutatedClass><mutatedMethod>&#60;init&#62;</mutatedMethod><methodDescription>(Lorg/asteriskjava/live/internal/AsteriskServerImpl;)V</methodDescription><lineNumber>87</lineNumber><mutator>org.pitest.mutationtest.engine.gregor.mutators.ConstructorCallMutator</mutator><index>17</index><killingTest/></mutation>
+
+	<mutation detected='true' status='KILLED'><sourceFile>ChannelManager.java</sourceFile><mutatedClass>org.asteriskjava.live.internal.ChannelManager</mutatedClass><mutatedMethod>&#60;init&#62;</mutatedMethod><methodDescription>(Lorg/asteriskjava/live/internal/AsteriskServerImpl;)V</methodDescription><lineNumber>73</lineNumber><mutator>org.pitest.mutationtest.engine.gregor.mutators.NonVoidMethodCallMutator</mutator><index>9</index><killingTest>org.asteriskjava.live.internal.AsteriskChannelImplTest.testStateChange(org.asteriskjava.live.internal.AsteriskChannelImplTest),org.asteriskjava.live.internal.AsteriskAgentImplTest.testUpdateStatus(org.asteriskjava.live.internal.AsteriskAgentImplTest)</killingTest></mutation>
+	
 In the example aboce there are two mutants,one of which is killed and the other is not killed(Survived).
