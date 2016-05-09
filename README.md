@@ -128,3 +128,28 @@ After generating the reduced test cases,we need to apply the result back to the 
 	java -cp PATHTO\ASM\bin\;PATHTO\ASM\lib\asm-all-5.0.3.jar Myown.RemoveMethod OriginalClassfile NewClassfileafterreduction NameOfTestcase
 
 ### Step 5 Compare Result with Mutation Test ###
+
+In this step, we run PITest on original projects, projects after reduction by ILP, projects after reduction by Greedy. 
+The configuration of PIT is like following:
+
+	<plugin>
+	    <groupId>org.pitest</groupId>
+	    <artifactId>pitest-maven</artifactId>
+	    <version>1.1.7-SNAPSHOT</version>
+	    <configuration>
+	        <targetClasses>
+	            <param>com.mashape.*</param>  
+	        </targetClasses>
+	<mutators>
+	                <mutator>ALL</mutator>
+	      </mutators>
+	         <outputFormats>
+	                        <param>XML</param>
+	                        <param>html</param>
+	         </outputFormats>
+	    </configuration>
+	</plugin>
+
+Then we calculating the ratio of “Killed” with all mutants to evaluate ILP and Greedy according to the PITest report) .For example
+
+In the example aboce there are two mutants,one of which is killed and the other is not killed(Survived).
